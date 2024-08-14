@@ -1,0 +1,345 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: white;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
+/* 
+.cursor {
+    height: 20px;
+    width: ;
+}
+
+.btn {
+    cursor: none !important;
+} */
+
+#nav {
+  height: 60px;
+  width: 100%;
+  z-index: 102;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 0 20px;
+  mix-blend-mode: difference;
+  position: fixed;
+}
+
+#nav > img {
+  height: 70px;
+}
+
+#nav-part2 {
+  margin-left: 10px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 30px;
+  font-family: "Crimson Text", serif;
+}
+
+#nav-part3 {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 30px;
+  font-family: "Crimson Text", serif;
+}
+
+.main {
+  background-color: black;
+}
+
+.page1 {
+  width: 100%;
+  min-height: 100vh;
+  z-index: 9;
+  position: relative;
+  padding-top: 10vw;
+}
+
+.page1 > img {
+  padding: 40px 0px;
+  left: 50%;
+  position: relative;
+  margin-bottom: 10vw;
+  transform: translate(-50%, 0);
+  height: 800px;
+}
+
+.page1 > h1 {
+  font-family: "Crimson Text", sans-serif;
+  font-size: 8vw;
+  font-weight: 400px;
+  margin-left: 10vw;
+  margin-top: 10vh;
+  text-transform: uppercase;
+}
+
+.page1 > h2 {
+  font-family: "Crimson Text", sans-serif;
+  font-size: 8vw;
+  font-weight: 400px;
+  margin-left: 33vw;
+  text-transform: uppercase;
+  font-style: italic;
+}
+
+.page2 {
+  min-height: 100vh;
+  width: 100%;
+  padding-top: 10vw;
+  z-index: 10vw;
+  z-index: 9;
+  position: relative;
+  margin-top: 100px;
+  padding-bottom: 200px;
+}
+
+.page2 h1 {
+  font-family: "Titillium Web";
+  color: #473c3c;
+  font-size: 80px;
+  font-weight: 800;
+}
+
+.page2 p {
+    color: #473c3c;
+    font-size: 30px;
+}
+
+.header {
+  display: block;
+  width: 100%;
+}
+
+.paragraph {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding-left: 450px;
+}
+
+.page3 {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  z-index: 9;
+  padding-top: 180px;
+  color: black;
+  /* overflow: hidden; */
+  margin: 0;
+}
+
+.elem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.text-div {
+  height: 145px;
+  overflow: hidden;
+  /* font-size: 10px; */
+}
+
+.elem h1 {
+  font-size: 5.9vw;
+  transition: all ease-out 0.5s;
+  font-family: "Titillium Web", sans-serif;
+}
+
+.elem img {
+  position: absolute;
+  opacity: 0;
+  transition: all ease-out 0.5s;
+  height: 280px;
+  width: 280px;
+  transform: translateY(10%) rotate(5deg);
+}
+
+.elem img:nth-child(1) {
+  left: 12%;
+}
+
+.elem img:nth-child(3) {
+  right: 10%;
+  padding-top: 20px;
+}
+
+.elem:hover h1 {
+  transform: translateY(-100%);
+  color: #edbfff;
+}
+
+.elem:hover img {
+  color: #edbfff;
+  opacity: 1;
+  transform: translateY(0%) rotate(0deg);
+}
+
+.box {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  min-height: 100px;
+  /* background-color: red; */
+  z-index: 9;
+  width: 100%;
+  position: relative;
+}
+
+
+.box .block1 h2 {
+  text-transform: uppercase;
+  font-family: "Montserrat", sans-serif;
+  font-size: 30px;
+  letter-spacing: 2px;
+}
+
+
+#image{
+  border-radius: 25%;
+  height: 405px;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
+p {
+  font-size: 25px;
+}
+
+button{
+  height:42px;
+  width: 171px;
+  background-color: blueviolet;
+  color: whitesmoke;
+  font-weight: bold;
+  margin-right: 25px;
+  border-radius: 10px;
+  font-size: 20px;
+}
+
+
+
+#timeline{
+  font-size: 0;
+}
+
+.status{
+  font-size: 0;
+  width:0;
+  height:0
+}
+
+#myVideoTag{
+  margin-top:30px;
+}
+
+
+.slider {
+    height: 5%;
+    width: 6px; 
+    background: #000;  
+    position: absolute;  
+
+}
+
+span{
+  /* width:64px; */
+  height:37px;
+  display:inline-block;
+  margin-top:34px;
+}
+
+#audio_prediction,#visual_prediction,#visual_emo{
+  display: block;
+  height: 30px;
+  font-size:25px;
+  padding:10px;
+  width:113px;
+}
+
+.Angry,.Anger{
+  background-color:  red;
+  color:white;
+  font-weight:bold;
+}
+
+.Disgust{
+  background-color: darkgoldenrod;
+  color:white;
+  font-weight: bold;
+}
+
+.Happy,.Happiness{
+  background-color: chartreuse;
+  color: white;
+  font-weight: bold;
+}
+
+.Sad,.Sadness{
+  background-color: indigo;
+  color: white;
+  font-weight: bold;
+}
+
+.Neutral{
+  font-weight: bold;
+  background-color: deeppink;
+  color: white;
+}
+
+.Calm{
+  background-color: darkcyan;
+  color: white;
+  font-weight: bold;
+}
+
+
+
+.Surprise,.Surprised{
+  background-color: dodgerblue;
+  color: white;
+  font-weight: bold;
+}
+
+.Fearful{
+  background-color: black;
+  color:white;
+  font-weight: bold;
+}
+
+.timeline-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.timeline-container span {
+  flex: 1 0 auto;
+}
+
+#audio-statis>li,#visual-statis>li{
+  display: inline-block;
+  padding-right: 10px;
+}
+
+#graph-statis>li{
+  font-weight: bold;
+  font-size: 27px;
+}
+
+canvas#audioPieChart,canvas#visualPieChart {
+  margin-left: 700px;
+}
+
+

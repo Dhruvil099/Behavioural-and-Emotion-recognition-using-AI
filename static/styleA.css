@@ -1,0 +1,137 @@
+#image{
+    border-radius: 25%;
+    height: 405px;
+    width: -moz-fit-content;
+    width: fit-content;
+    margin-left:274px;
+  }
+  
+  p {
+    font-size: 25px;
+  }
+  
+  button{
+    height:42px;
+    width: 171px;
+    background-color: blueviolet;
+    color: whitesmoke;
+    font-weight: bold;
+    margin-right: 25px;
+    border-radius: 10px;
+    font-size: 20px;
+  }
+  
+  
+  
+  #timeline{
+    font-size: 0;
+  }
+  
+  .status{
+    font-size: 0;
+    width:0;
+    height:0
+  }
+  
+  #myVideoTag{
+    margin-top:30px;
+  }
+  
+  
+  .slider {
+      height: 5%;
+      width: 6px; 
+      background: #000;  
+      position: absolute;  
+  
+  }
+  
+  span{
+    /* width:64px; */
+    height:37px;
+    display:inline-block;
+    margin-top:34px;
+  }
+  
+  #audio_prediction,#visual_prediction,#visual_emo{
+    display: block;
+    height: 30px;
+    font-size:25px;
+    padding:10px;
+    width:113px;
+  }
+  
+  .Angry,.Anger{
+    background-color:  red;
+    color:white;
+    font-weight:bold;
+  }
+  
+  .Disgust{
+    background-color: darkgoldenrod;
+    color:white;
+    font-weight: bold;
+  }
+  
+  .Happy,.Happiness{
+    background-color: chartreuse;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .Sad,.Sadness{
+    background-color: indigo;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .Neutral{
+    font-weight: bold;
+    background-color: deeppink;
+    color: white;
+  }
+  
+  .Calm{
+    background-color: darkcyan;
+    color: white;
+    font-weight: bold;
+  }
+  
+  
+  
+  .Surprise,.Surprised{
+    background-color: dodgerblue;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .Fearful{
+    background-color: black;
+    color:white;
+    font-weight: bold;
+  }
+  
+  .timeline-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .timeline-container span {
+    flex: 1 0 auto;
+  }
+  
+  #audio-statis>li,#visual-statis>li{
+    display: inline-block;
+    padding-right: 10px;
+  }
+  
+  canvas#audioPieChart,canvas#visualPieChart {
+    margin-left: 700px;
+  }
+  
+  #graph-statis>li{
+    font-weight: bold;
+    font-size: 27px;
+  }
+  

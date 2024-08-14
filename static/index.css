@@ -1,0 +1,231 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: white;
+  /* background-color: black; */
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  cursor: none;
+}
+
+.cursor {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  position: fixed;
+  background-color: #edbfff;
+  z-index: 8;
+  mix-blend-mode: difference;
+  transition: background-image ease 0.5s;
+  background-position: center;
+  background-size: cover;
+}
+.btn {
+  cursor: none !important;
+}
+
+.main {
+  background-color: black;
+  /* cursor: none; */
+}
+.page1 {
+  width: 100%;
+  min-height: 100vh;
+  z-index: 9;
+  position: relative;
+  padding-top: 10vw;
+  /* background-color: aqua; */
+}
+
+#nav {
+  height: 60px;
+  width: 100%;
+  z-index: 102;
+  /* background-color: red; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  mix-blend-mode: difference;
+  position: fixed;
+}
+
+#nav > img {
+  height: 70px;
+}
+
+#nav-part2 {
+  margin-left: 10px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 30px;
+  font-family: "Crimson Text", serif;
+}
+
+#nav-part3 {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 30px;
+  font-family: "Crimson Text", serif;
+}
+
+.page1 > img {
+  padding: 40px 0px;
+  left: 50%;
+  position: relative;
+  margin-bottom: 10vw;
+  transform: translate(-50%, 0);
+}
+.page1 > h1 {
+  font-family: "Crimson Text", sans-serif;
+  font-size: 8vw;
+  font-weight: 400px;
+  margin-left: 10vw;
+  margin-top: 10vh;
+  text-transform: uppercase;
+}
+.page1 > h2 {
+  font-family: "Crimson Text", sans-serif;
+  font-size: 8vw;
+  font-weight: 400px;
+  margin-left: 33vw;
+  text-transform: uppercase;
+  font-style: italic;
+}
+
+.page2 {
+  min-height: 60vh;
+  width: 100%;
+  padding-top: 10vw;
+  /* border-bottom: 2px solid black; */
+  z-index: 9;
+  position: relative;
+  /* background-color:aqua; */
+  /* display: flex;
+    justify-content: center;
+    align-items:flex-start; */
+  margin-top: 100px;
+  padding-bottom: 200px;
+  /* margin-bottom: 100px; */
+  /* color: black; */
+}
+.page2 h1 {
+  font-family: "Titillium Web";
+  /* font-style: italic; */
+  color: dimgrey;
+  font-size: 80px;
+}
+.page2 p {
+  /* text-align: left; */
+  color: dimgrey;
+  font-size: 30px;
+}
+
+/* .page2 h1,
+p {
+  font-size: 80px;
+} */
+
+.header {
+  display: block;
+  width: 100%;
+  /* background-color: red; */
+}
+.paragraph {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding-left: 450px;
+  /* background-color: blue; */
+}
+
+.page3 {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  z-index: 9;
+  padding-top: 180px;
+  color: black;
+  overflow: hidden;
+  /* background-color: aliceblue; */
+  /* border-bottom: 5px solid; */
+  margin: 0;
+}
+
+.elem {
+  /* background-color: salmon; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.text-div {
+  /* background-color: lightblue; */
+  height: 145px;
+  overflow: hidden;
+}
+
+.elem h1 {
+  font-size: 7.3vw;
+  transition: all ease-out 0.5s;
+  font-family: "Titillium Web", sans-serif;
+}
+
+.elem img {
+  position: absolute;
+  opacity: 0;
+  transition: all ease-out 0.5s;
+  height: 280px;
+  width: 280px;
+  transform: translateY(10%) rotate(5deg);
+  /* padding: 200px 0; */
+}
+
+.elem img:nth-child(1) {
+  left: 12%;
+}
+
+.elem img:nth-child(3) {
+  right: 10%;
+  padding-top: 20px;
+}
+
+.elem:hover h1 {
+  /* background-color: black; */
+  transform: translateY(-100%);
+  color: #edbfff;
+}
+
+.elem:hover img {
+  /* background-color: black; */
+  /* transform: translateY(-100%); */
+  color: #edbfff;
+  opacity: 1;
+  transform: translateY(0%) rotate(0deg);
+}
+.box {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  min-height: 100px;
+  /* background-color: red; */
+  z-index: 9;
+  width: 100%;
+  position: relative;
+}
+.box .block1 h2 {
+  text-transform: uppercase;
+  font-family: "Montserrat", sans-serif;
+  font-size: 30px;
+  letter-spacing: 2px;
+}
+/* .footer{
+
+} */ 

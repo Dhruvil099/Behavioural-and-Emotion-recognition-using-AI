@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Video</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styleA.css') }}">
+    
+    <script>
+
+        var audio_arr = [];
+        var visual_arr = [];
+
+        function startCapture() {
+            fetch('/start-capture');
+        }
+
+        function stopCapture() {
+            fetch('/stop-capture');
+            //  Audio : 'Angry', 'Calm', 'Disgust', 'Fearful','Happy', 'Neutral', 'Sad', 'Surprised'
+            // Visual : 'Anger', 'Disgust', 'Happiness', 'Sadness', 'Surprise'
+            
+
+            let surpriseV = (visual_arr.reduce((s, a) => a === 'Surprise' ? s + 1 : s, 0)/(visual_arr.length))*100;
+            let neutralV = (visual_arr.reduce((s, a) => a === 'Neutral' ? s + 1 : s, 0)/(visual_arr.length))*100;
+            let angerV = (visual_arr.reduce((s, a) => a === 'Anger' ? s + 1 : s, 0)/(visual_arr.length))*100;
+            let happyV = (visual_arr.reduce((s, a) => a === 'Happiness' ? s + 1 : s, 0)/(visual_arr.length))*100;
+            let sadV =( visual_arr.reduce((s, a) => a === 'Sadness' ? s + 1 : s, 0)/(visual_arr.length))*100;
+            let visualData = [surpriseV.toFixed(2), neutralV.toFixed(2), angerV.toFixed(2), happyV.toFixed(2), sadV.toFixed(2)];
+            let visualLabels = ['Surprise', 'Neutral', 'Anger', 'Happy', 'Sad'];
+            let visualCtx = document.getElementById('visualPieChart').getContext('2d');
+
+            let visualPieChart = new Chart(visualCtx, {
+    type: 'pie',
+    data: {
+        labels: visualLabels,
+        datasets: [{
+            data: visualData,
+            backgroundColor: ["dodgerblue","deeppink","red","chartreuse","indigo"] ,  // Add colors for each category
+        }]
+    },
+    options: {
+        responsive: false,
+        title: {
+            display: true,
+            text: 'Visual Emotions'
+        }
+    }
+});
+
+            
+         
+
+            
+        }
+
+
+
+        
+
+        var source = new EventSource("/stream");
+        source.addEventListener('audio_prediction', function(event) {
+            document.getElementById("audio_prediction").className=""
+            var data = JSON.parse(event.data);
+            document.getElementById("audio_prediction").innerHTML = data.audio_emotion;
+            audio_arr.push(data.audio_emotion);
+            document.getElementById("audio_prediction").classList.add(String(data.audio_emotion))
+            var aud_timeline = document.getElementById("aud-timeline");
+            var newElement2 = document.createElement("span");
+            newElement2.classList.add(String(data.audio_emotion));
+          
+            newElement2.value = data.timestamp;
+            aud_timeline.appendChild(newElement2);
+
+        }, false);
+        source.addEventListener('visual_prediction', function(event) {
+            document.getElementById("visual_prediction").className = "";
+            document.getElementById("visual_emo").className = "";
+            var data = JSON.parse(event.data);
+            document.getElementById("visual_emo").innerHTML = data.visual_emotion;
+            visual_arr.push(data.visual_emotion);
+            document.getElementById("visual_emo").classList.add(String(data.visual_emotion))
+            var timeline = document.getElementById("timeline");
+            var newElement = document.createElement("span");
+            newElement.classList.add(String(data.visual_emotion));
+          
+            newElement.value = data.timestamp;
+            timeline.appendChild(newElement);
+        }, false);
+
+        source.addEventListener('status',(event) => {
+            let data = JSON.parse(event.data);
+            let status = document.getElementById("status");
+            status.classList = "";
+            if(data["status"] !== "Finished"){
+                status.style.width=163;
+                status.innerHTML = data["status"];
+            }else{
+                status.innerHTML = "";
+                status.classList.add("status");
+                let angerA = (audio_arr.reduce((s, a) => a === 'Angry' ? s + 1 : s, 0)/(audio_arr.length))*100;
+                let calmA = (audio_arr.reduce((s, a) => a === 'Calm' ? s + 1 : s, 0)/(audio_arr.length))*100;
+                let disgustA = (audio_arr.reduce((s, a) => a === 'Disgust' ? s + 1 : s, 0)/(audio_arr.length))*100;
+                let fearA = (audio_arr.reduce((s, a) => a === 'Fearful' ? s + 1 : s, 0)/(audio_arr.length))*100;
+                let happyA = (audio_arr.reduce((s, a) => a === 'Happy' ? s + 1 : s, 0)/(audio_arr.length))*100;
+                let neutralA = (audio_arr.reduce((s, a) => a === 'Neutral' ? s + 1 : s, 0)/(audio_arr.length))*100;
+                let sadA = (audio_arr.reduce((s, a) => a === 'Sad' ? s + 1 : s, 0)/(audio_arr.length))*100;
+                let surpriseA =( audio_arr.reduce((s, a) => a === 'Surprise' ? s + 1 : s, 0)/(audio_arr.length))*100;
+
+                let audioData = [angerA.toFixed(2), happyA.toFixed(2), neutralA.toFixed(2), sadA.toFixed(2)];
+                let audioLabels = ['Angry', 'Happy', 'Neutral', 'Sad'];
+                let audioCtx = document.getElementById('audioPieChart').getContext('2d');
+                let audioPieChart = new Chart(audioCtx, {
+    type: 'pie',
+    data: {
+        labels: audioLabels,
+        datasets: [{
+            data: audioData,
+            backgroundColor: ["red","chartreuse","deeppink","indigo"], // Add colors for each category
+        }]
+    },
+    options: {
+        responsive: false,
+        title: {
+            display: true,
+            text: 'Audio Emotions'
+        }
+    }
+});
+
+                document.getElementById("angerA").innerHTML = angerA.toFixed(2);
+                document.getElementById("calmA").innerHTML = calmA.toFixed(2);
+                document.getElementById("disgustA").innerHTML = disgustA.toFixed(2);
+                document.getElementById("fearA").innerHTML = fearA.toFixed(2);
+                document.getElementById("happyA").innerHTML = happyA.toFixed(2);
+                document.getElementById("neutralA").innerHTML = neutralA.toFixed(2);
+                document.getElementById("sadA").innerHTML = sadA.toFixed(2);
+                document.getElementById("surpriseA").innerHTML = surpriseA.toFixed(2);
+            }
+        })
+    </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    
+</head>
+<body>
+    <button onclick="startCapture()">Start Capture</button>
+    <button onclick="stopCapture()">Stop Capture</button>
+    <img id="image" src="{{ url_for('video_feed') }}" width="100%" alt="nope">
+    <br><br><br>
+    <p id="Paud">Audio Prediction :<span style="width: 162;" class="status" id="status"></span> <span class="" id="audio_prediction"></span></p>
+    <div id="aud-timeline" class="timeline-container">
+        <div id="aud-slider" class="slider"></div>
+    </div>
+    <canvas id="audioPieChart" width="450" height="450"></canvas>
+
+    <br>
+    <p style="margin-bottom:0;padding-bottom:0;margin-top: 0;">Visual Prediction: <span id="visual_emo"></span><span class="" style="display: inline;" id="visual_prediction"></span></p>
+    <div id="timeline" class="timeline-container">
+        <div id="slider" class="slider"></div>
+    </div>
+    <canvas id="visualPieChart" width="450" height="450"></canvas>
+
+<br><br><br><br><br>
+
+        <canvas id="myCanvas"></canvas>
+        
+<ul id="graph-statis">
+    <li>Max Pitch value : <span id="max_pitch"></span></li>
+    <li>Average Pitch value : <span id="avg_pitch"></span></li>
+    <li>Differnce between Max and Average pitch value : <span id="diff_pitch"></span></li>
+    <li>Max Intensity value : <span id="max_intensity"></span></li>
+    <li>Average Intensity value : <span id="avg_intensity"></span></li>
+    <li>Differnce between Max and Average Intensity value : <span id="diff_intensity"></span></li>
+</ul>
+
+    <video id="myVideoTag" width="670" height="377"  controls>
+        <source src="" type='video/mp4'>
+    </video>
+    <script>
+        var source = new EventSource("/stream");
+        source.addEventListener('srce', function(event) {
+            var data = JSON.parse(event.data);
+            if (data['saved'] === "true"){
+                document.querySelector("#myVideoTag > source").src = "/video"
+                document.querySelector("#myVideoTag ").load()
+            }
+        })
+
+        
+        
+    </script>
+    <br><br>
+     <audio id="myAudioTag" controls>
+        <source src="" type="audio/wav">
+    </audio>
+
+    <script type="module">
+
+var pitch_arr = [];
+var intensity_arr = [];
+const average = arr => arr.reduce( ( p, c ) => p + c, 0 ) / arr.length;
+var video = document.getElementById("myVideoTag");
+var audio = document.getElementById("myAudioTag");
+video.addEventListener('play', function() {
+    audio.play();
+});
+
+video.addEventListener('pause', function() {
+    audio.pause();
+});
+
+            
+        function setCurrentTime(timeInSeconds) {
+// Assuming video and audio are HTML audio and video elements
+var video = document.getElementById('myVideoTag');
+var audio = document.getElementById('myAudioTag');
+video.currentTime = timeInSeconds;
+audio.currentTime = timeInSeconds;
+}
+
+
+        var source = new EventSource("/stream");
+        source.addEventListener('audio_features', function(event) {
+var data = JSON.parse(event.data);
+pitch_arr.push(data.pitch);
+intensity_arr.push(data.intensity*1200);
+updateGraph(data);
+}, false);
+
+source.addEventListener('status2',(event) => {
+            let data = JSON.parse(event.data);
+            let status = document.getElementById("status");
+            status.classList = "";
+            if(data["status"] !== "Finished"){
+                status.style.width=163;
+                status.innerHTML = data["status"];
+            }else{
+                    var max_pitch = Math.max(...pitch_arr);
+                    var max_intensity = Math.max(...intensity_arr);
+                    var avg_pitch = average(pitch_arr);
+                    var avg_intensity = average(intensity_arr);
+                    document.getElementById("max_pitch").innerHTML = max_pitch.toFixed(2);
+                    document.getElementById("avg_pitch").innerHTML = avg_pitch.toFixed(2);
+                    document.getElementById("diff_pitch").innerHTML = (max_pitch-avg_pitch).toFixed(2);
+                    document.getElementById("max_intensity").innerHTML = max_intensity.toFixed(2);
+                    document.getElementById("avg_intensity").innerHTML = avg_intensity.toFixed(2);
+                    document.getElementById("diff_intensity").innerHTML = (max_intensity-avg_intensity).toFixed(2);
+
+            }})
+
+var ctx = document.getElementById('myCanvas').getContext('2d');
+var chart = new Chart(ctx, {
+type: 'line',
+data: {
+    labels: [],  // timestamps
+    datasets: [{
+        data: [],  // pitch data
+        label: 'Pitch',
+        borderColor: 'rgb(255, 99, 132)',
+        fill: false
+    }, {
+        data: [],  // intensity data
+        label: 'Intensity',
+        borderColor: 'rgb(75, 192, 192)',
+        fill: false
+    }]
+},
+options: {
+
+   
+    onClick: function(event, elements) {
+      if (elements.length > 0) {
+          var index = elements[0].index;
+          var timestamp = chart.data.labels[index];
+          var timeInSeconds = timestamp;
+          setCurrentTime(timeInSeconds);
+      }
+  },
+
+
+    responsive: true,
+    title: {
+        display: true,
+        text: 'Live Audio Data'
+    },
+    scales: {
+        xAxes: [{
+            type: 'time',
+            display: true,
+            time: {
+    unit: 'second',
+    displayFormats: {
+      second: 'HH:mm:ss'
+    }
+  },
+            scaleLabel: {
+                display: true,
+                labelString: 'Time'
+            }
+        }],
+        yAxes: [{
+            display: true,
+            scaleLabel: {
+                display: true,
+                labelString: 'Value'
+            }
+        }]
+    }
+}
+});
+
+function updateGraph(data) {
+
+var timestamp = 0;
+if (data.timestamp < 0){
+    timestamp = 0;  
+}else{
+    timestamp = data.timestamp;
+}
+chart.data.labels.push(timestamp.toFixed(2));  // convert to milliseconds
+chart.data.datasets[0].data.push(data.pitch);
+chart.data.datasets[1].data.push(data.intensity*100);
+chart.update();
+}
+
+
+    </script>
+
+    <script>
+        const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
+        var source = new EventSource("/stream");
+        source.addEventListener('aud_srce', function(event) {
+            var data = JSON.parse(event.data);
+            if (data['saved'] === "true"){
+                document.querySelector("#myAudioTag > source").src = "/audio"
+                document.querySelector("#myAudioTag ").load()
+            }})
+        
+    </script>
+    <script>
+var slider = document.getElementById("slider");
+var audSlider = document.getElementById("aud-slider");
+var audio = document.getElementById("myAudioTag");
+var video = document.getElementById("myVideoTag");
+var timeline = document.getElementById("timeline");
+var audTimeline = document.getElementById("aud-timeline");
+var spans = timeline.getElementsByTagName("span");
+var audSpans = audTimeline.getElementsByTagName("span");
+
+function handleDrag(event, spans) {
+ var sliderPosition = event.clientX / this.parentElement.offsetWidth;
+ var audioDuration = audio.duration;
+
+ // Calculate the current time based on the slider position and duration of the audio
+ var currentTime = sliderPosition * audioDuration;
+
+ // Check if currentTime exceeds the duration of the audio or video
+ if (currentTime > audioDuration) {
+   currentTime = audioDuration;
+ }
+
+ // Set the current time of the audio and video
+ audio.currentTime = currentTime;
+ video.currentTime = currentTime;
+}
+
+function makeDraggable(slider, spans) {
+ var isDown = false;
+ var offset = 0;
+
+ slider.addEventListener('mousedown', function(e) {
+ isDown = true;
+ offset = slider.offsetLeft - e.clientX;
+ }, true);
+
+ document.addEventListener('mouseup', function() {
+ isDown = false;
+ }, true);
+
+ document.addEventListener('mousemove', function(e) {
+ e.preventDefault();
+ if(isDown) {
+    var x = e.clientX + offset;
+    var max = timeline.offsetWidth - slider.offsetWidth;
+    if(x < 0) x = 0;
+    if(x > max) x = max;
+    slider.style.left = x + 'px';
+    handleDrag.call(slider, e, spans);
+ }
+ }, true);
+}
+
+makeDraggable(slider, spans);
+makeDraggable(audSlider, audSpans);
+
+window.onload = function() {
+ audio.currentTime = 0;
+ video.currentTime = 0;
+};
+
+    </script>
+<script>
+    slider.addEventListener('mousemove', updatePrediction);
+audSlider.addEventListener('mousemove', updatePrediction);
+function updatePrediction(event) {
+  var isAudio = this.id === 'aud-slider';
+
+  var timeline = isAudio ? document.getElementById('aud-timeline') : document.getElementById('timeline');
+  var prediction = isAudio ? document.getElementById('audio_prediction') : document.getElementById('visual_emo');
+
+  var spans = timeline.getElementsByTagName('span');
+  var sliderPosition = (this.offsetLeft + event.offsetX) / timeline.offsetWidth ;
+  var spanIndex = Math.floor(sliderPosition * spans.length);
+
+  var span = spans[spanIndex];// edited -1
+
+  prediction.className = span.className;
+  prediction.innerHTML = span.className;
+
+
+
+  var video = document.getElementById("myVideoTag");
+var audio = document.getElementById("myAudioTag");
+video.addEventListener('play', function() {
+    audio.play();
+});
+
+video.addEventListener('pause', function() {
+    audio.pause();
+});
+
+}
+</script>
+</body>
+</html>

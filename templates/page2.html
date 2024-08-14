@@ -1,0 +1,247 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Video</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styleA.css') }}">
+    <script>
+        function startCapture() {
+            fetch('/start-capture');
+        }
+
+        function stopCapture() {
+            fetch('/stop-capture');
+            
+        }
+
+        var source = new EventSource("/stream");
+        source.addEventListener('audio_prediction', function(event) {
+            document.getElementById("audio_prediction").className=""
+            var data = JSON.parse(event.data);
+            document.getElementById("audio_prediction").innerHTML = data.audio_emotion;
+            document.getElementById("audio_prediction").classList.add(String(data.audio_emotion))
+            var aud_timeline = document.getElementById("aud-timeline");
+            var newElement2 = document.createElement("span");
+            newElement2.classList.add(String(data.audio_emotion));
+          
+            newElement2.value = data.timestamp;
+            aud_timeline.appendChild(newElement2);
+
+        }, false);
+        source.addEventListener('visual_prediction', function(event) {
+            document.getElementById("visual_prediction").className = "";
+            document.getElementById("visual_emo").className = "";
+            var data = JSON.parse(event.data);
+            document.getElementById("visual_emo").innerHTML = data.visual_emotion;
+            document.getElementById("visual_emo").classList.add(String(data.visual_emotion))
+            var timeline = document.getElementById("timeline");
+            var newElement = document.createElement("span");
+            newElement.classList.add(String(data.visual_emotion));
+          
+            newElement.value = data.timestamp;
+            timeline.appendChild(newElement);
+        }, false);
+    </script>
+</head>
+<body>
+    <button onclick="startCapture()">Start Capture</button>
+    <button onclick="stopCapture()">Stop Capture</button>
+    <img id="image" src="{{ url_for('video_feed') }}" width="100%" alt="nope">
+    <br><br><br>
+    <p>Audio Prediction :<span style="width: 162;" class="status" id="status"></span> <span class="" id="audio_prediction"></span></p>
+    <div id="aud-timeline" class="timeline-container">
+        <div id="aud-slider" class="slider"></div>
+    </div>
+    <br>
+    <p style="margin-bottom:0;padding-bottom:0;">Visual Prediction: <span id="visual_emo"></span><span class="" style="display: inline;" id="visual_prediction"></span></p>
+    <div id="timeline" class="timeline-container">
+        <div id="slider" class="slider"></div>
+    </div>
+    <video id="myVideoTag" width="670" height="377"  controls>
+        <source src="" type='video/mp4'>
+    </video>
+    <script>
+        var source = new EventSource("/stream");
+        source.addEventListener('srce', function(event) {
+            var data = JSON.parse(event.data);
+            if (data['saved'] === "true"){
+                document.querySelector("#myVideoTag > source").src = "/video"
+                document.querySelector("#myVideoTag ").load()
+            }
+        })
+
+        source.addEventListener('status',(event) => {
+            let data = JSON.parse(event.data);
+            let status = document.getElementById("status");
+            status.classList = "";
+            if(data["status"] !== "Finished"){
+                status.style.width=163;
+                status.innerHTML = data["status"];
+            }else{
+                status.innerHTML = "";
+                status.classList.add("status");
+            }
+        })
+        
+        // var timeline = document.getElementById("timeline");
+        // timeline.addEventListener("click", function(event) {
+        //     var video = document.getElementById("myVideoTag");
+        //     video.currentTime = event.target.value;  
+        // });
+    </script>
+    <br><br>
+     <audio id="myAudioTag" controls>
+        <source src="" type="audio/wav">
+    </audio>
+    <script>
+        const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
+        var source = new EventSource("/stream");
+        source.addEventListener('aud_srce', function(event) {
+            var data = JSON.parse(event.data);
+            if (data['saved'] === "true"){
+                document.querySelector("#myAudioTag > source").src = "/audio"
+                document.querySelector("#myAudioTag ").load()
+            }})
+    //     var timeline = document.getElementById("timeline");
+    //     timeline.addEventListener("click", function(event) {
+    //     var audio = document.getElementById("myAudioTag");
+    //     var video = document.getElementById("myVideoTag");
+    //     audio.currentTime = event.target.value;
+    //     video.pause();
+    //     audio.pause();  
+    //     function sleep(milliseconds) {
+    //         const date = Date.now();
+    //         let currentDate = null;
+    //         do {
+    //             currentDate = Date.now();
+    //         } while (currentDate - date < milliseconds);
+    //     }
+    //     sleep(1000);
+            
+    //     video.play();
+    //     audio.play();
+    // });
+
+
+    // var aud_timeline = document.getElementById("aud-timeline");
+    //     aud_timeline.addEventListener("click", function(event) {
+    //     var audio = document.getElementById("myAudioTag");
+    //     var video = document.getElementById("myVideoTag");
+    //     audio.currentTime = event.target.value;
+    //     video.currentTime = event.target.value; 
+    //     video.pause();
+    //     audio.pause();  
+    //     function sleep(milliseconds) {
+    //         const date = Date.now();
+    //         let currentDate = null;
+    //         do {
+    //             currentDate = Date.now();
+    //         } while (currentDate - date < milliseconds);
+    //     }
+    //     sleep(1000);
+            
+    //     video.play();
+    //     audio.play();
+    // });
+        
+    </script>
+    <script>
+var slider = document.getElementById("slider");
+var audSlider = document.getElementById("aud-slider");
+var audio = document.getElementById("myAudioTag");
+var video = document.getElementById("myVideoTag");
+var timeline = document.getElementById("timeline");
+var audTimeline = document.getElementById("aud-timeline");
+var spans = timeline.getElementsByTagName("span");
+var audSpans = audTimeline.getElementsByTagName("span");
+
+function handleDrag(event, spans) {
+ var sliderPosition = event.clientX / this.parentElement.offsetWidth;
+ var audioDuration = audio.duration;
+
+ // Calculate the current time based on the slider position and duration of the audio
+ var currentTime = sliderPosition * audioDuration;
+
+ // Check if currentTime exceeds the duration of the audio or video
+ if (currentTime > audioDuration) {
+   currentTime = audioDuration;
+ }
+
+ // Set the current time of the audio and video
+ audio.currentTime = currentTime;
+ video.currentTime = currentTime;
+}
+
+function makeDraggable(slider, spans) {
+ var isDown = false;
+ var offset = 0;
+
+ slider.addEventListener('mousedown', function(e) {
+ isDown = true;
+ offset = slider.offsetLeft - e.clientX;
+ }, true);
+
+ document.addEventListener('mouseup', function() {
+ isDown = false;
+ }, true);
+
+ document.addEventListener('mousemove', function(e) {
+ e.preventDefault();
+ if(isDown) {
+    var x = e.clientX + offset;
+    var max = timeline.offsetWidth - slider.offsetWidth;
+    if(x < 0) x = 0;
+    if(x > max) x = max;
+    slider.style.left = x + 'px';
+    handleDrag.call(slider, e, spans);
+ }
+ }, true);
+}
+
+makeDraggable(slider, spans);
+makeDraggable(audSlider, audSpans);
+
+window.onload = function() {
+ audio.currentTime = 0;
+ video.currentTime = 0;
+};
+
+    </script>
+<script>
+    slider.addEventListener('mousemove', updatePrediction);
+audSlider.addEventListener('mousemove', updatePrediction);
+function updatePrediction(event) {
+  var isAudio = this.id === 'aud-slider';
+
+  var timeline = isAudio ? document.getElementById('aud-timeline') : document.getElementById('timeline');
+  var prediction = isAudio ? document.getElementById('audio_prediction') : document.getElementById('visual_emo');
+
+  var spans = timeline.getElementsByTagName('span');
+  var sliderPosition = (this.offsetLeft + event.offsetX) / timeline.offsetWidth ;
+  var spanIndex = Math.floor(sliderPosition * spans.length);
+
+  var span = spans[spanIndex];// edited -1
+
+  prediction.className = span.className;
+  prediction.innerHTML = span.className;
+
+
+
+  var video = document.getElementById("myVideoTag");
+var audio = document.getElementById("myAudioTag");
+video.addEventListener('play', function() {
+    audio.play();
+});
+
+video.addEventListener('pause', function() {
+    audio.pause();
+});
+
+}
+</script>
+
+</body>
+</html>
+
